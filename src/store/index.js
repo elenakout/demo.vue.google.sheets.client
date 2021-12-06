@@ -6,11 +6,14 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     allNotes: [],
-    activeNote: {},
+    activeNote: {
+      title: 'New Note',
+    },
+    error: null,
   },
   getters: {
-    GET_ALL_NOTES() { },
-    GET_ACTIVE_NOTE() { },
+    ALL_NOTES() { },
+    ACTIVE_NOTE() { },
   },
   mutations: {
     SET_ACTIVE_NOTE() {
@@ -21,7 +24,21 @@ export default new Vuex.Store({
     SET_ACTIVE_NOTE_CONTENT() { },
   },
   actions: {
-    GET_ALL_NOTES() { },
+    async GET_ALL_NOTES({ state }) {
+      state.allNotes = [];
+      try {
+        const allNotes = await fetch('http://localhost:3000/api/v1/notes', {
+          method: 'GET',
+
+        });
+        const json = await allNotes.json();
+
+        state.allNotes = [...json.data];
+        state.activeNote = { ...json.data[0] };
+      } catch (error) {
+        console.log(error);
+      }
+    },
     CREATE_NEW_NOTE() {
       // set active note
       /*

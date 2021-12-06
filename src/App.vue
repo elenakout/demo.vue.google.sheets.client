@@ -3,20 +3,21 @@
     <aside>
       <header>
         <h1>Open notes</h1>
-        <button>Add Note</button>
-        <section class="cards-container">
-          <article class="card">
-            <h3>Title</h3>
-            <p>content</p>
-            <p>category</p>
-            <p>last modified</p>
-          </article>
-        </section>
       </header>
+      <button>Add Note</button>
+      <section class="cards-container">
+        <article class="card" v-for="note in allNotes" :key="note.id">
+          <h3>{{ note.title }}</h3>
+          <p>{{ note.content }}</p>
+          <p>{{ note.category }}</p>
+          <p>{{ note.id }}</p>
+        </article>
+      </section>
     </aside>
     <main>
       <section class="display">
         <h2>display note</h2>
+        <p>{{ activeNote.title }}</p>
       </section>
       <section class="editor">
         <h2>Note editor</h2>
@@ -26,9 +27,34 @@
 </template>
 
 <script>
+import { mapActions, mapMutations, mapState } from 'vuex';
+
 export default {
   name: 'App',
   components: {},
+  data() {
+    return {};
+  },
+  methods: {
+    ...mapActions([
+      'GET_ALL_NOTES',
+      'CREATE_NEW_NOTE',
+      'UPDATE_NOTE',
+      'SAVE_NOTE',
+      'DELETE_NOTE',
+    ]),
+    ...mapMutations([
+      'SET_ACTIVE_NOTE',
+      'SET_ACTIVE_NOTE_TITLE',
+      'SET_ACTIVE_NOTE_CONTENT',
+    ]),
+  },
+  computed: {
+    ...mapState(['allNotes', 'activeNote']),
+  },
+  created() {
+    this.GET_ALL_NOTES();
+  },
 };
 </script>
 
@@ -78,14 +104,24 @@ ul {
 aside {
   border: 1px solid red;
   flex: 0 1 auto;
+  padding: 1.5rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 main {
   border: 1px solid purple;
   flex: 2 1 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .card {
   border: 1px solid blue;
+  padding: 1.5rem;
 }
 </style>
