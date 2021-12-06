@@ -16,9 +16,10 @@ export default new Vuex.Store({
     ACTIVE_NOTE() { },
   },
   mutations: {
-    SET_ACTIVE_NOTE() {
+    SET_ACTIVE_NOTE(state, id) {
       // all notes find(id)
       // set state active note
+      state.activeNote = { ...state.allNotes[id] };
     },
     SET_ACTIVE_NOTE_TITLE() { },
     SET_ACTIVE_NOTE_CONTENT() { },

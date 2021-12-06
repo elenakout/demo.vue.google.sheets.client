@@ -5,9 +5,11 @@
         <h1>Open notes</h1>
       </header>
       <button>Add Note</button>
-      <section class="cards-container">
-        <article class="card" v-for="note in allNotes" :key="note.id">
-          <h3>{{ note.title }}</h3>
+      <section class="notes-container">
+        <article class="note" v-for="note in allNotes" :key="note.id">
+          <h3 @click="SET_ACTIVE_NOTE(note.id)" class="note__title">
+            {{ note.title }}
+          </h3>
           <p>{{ note.content }}</p>
           <p>{{ note.category }}</p>
           <p>{{ note.id }}</p>
@@ -120,8 +122,12 @@ main {
   gap: 1.5rem;
 }
 
-.card {
+.note {
   border: 1px solid blue;
   padding: 1.5rem;
+}
+
+.note__title {
+  cursor: pointer;
 }
 </style>
