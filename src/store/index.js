@@ -52,7 +52,7 @@ export default new Vuex.Store({
         console.log(error);
       }
     },
-    CREATE_NEW_NOTE() {
+    async CREATE_NEW_NOTE({ state }) {
       // set active note
       /*
         note = {
@@ -64,10 +64,42 @@ export default new Vuex.Store({
       */
       // save note -> api/v1/notes POST
       // GET_ALL_NOTES()
+
+      try {
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(state.activeNote),
+        };
+        const response = await fetch('http://localhost:3000/api/v1/notes', requestOptions);
+        const json = await response.json();
+
+        console.log('create res:', json.data);
+
+        console.log('update res:', json);
+        state.allNotes = [...json.data];
+        state.activeNote = { ...json.data[state.allNotes.length - 1] };
+      } catch (error) {
+        console.log(error);
+      }
     },
-    UPDATE_NOTE() {
+    async UPDATE_NOTE({ state }) {
       // active note -> set title
       // active note -> set content
+      try {
+        const requestOptions = {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(state.activeNote),
+        };
+        const response = await fetch(`http://localhost:3000/api/v1/notes/${state.activeNote.id}`, requestOptions);
+        const json = await response.json();
+        console.log('update res:', json);
+        state.allNotes = [...json.data];
+        state.activeNote = { ...json.data[0] };
+      } catch (error) {
+        console.log(error);
+      }
     },
     SAVE_NOTE() {
       // last modified -> Date.now

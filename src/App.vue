@@ -95,9 +95,9 @@ export default {
     },
     saveNote() {
       if (this.activeNote.id) {
-        console.log('update');
+        this.UPDATE_NOTE();
       } else {
-        console.log('new note');
+        this.CREATE_NEW_NOTE();
       }
     },
   },
