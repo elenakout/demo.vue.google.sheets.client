@@ -7,7 +7,10 @@ export default new Vuex.Store({
   state: {
     allNotes: [],
     activeNote: {
-      title: 'New Note',
+      title: '',
+      content: '',
+      category: '',
+      id: null,
     },
     error: null,
   },
@@ -21,8 +24,18 @@ export default new Vuex.Store({
       // set state active note
       state.activeNote = { ...state.allNotes[id] };
     },
-    SET_ACTIVE_NOTE_TITLE() { },
-    SET_ACTIVE_NOTE_CONTENT() { },
+    SET_ACTIVE_NOTE_TITLE(state, payload) {
+      state.activeNote.title = payload;
+    },
+    SET_ACTIVE_NOTE_CONTENT(state, payload) {
+      state.activeNote.content = payload;
+    },
+    SET_ACTIVE_NOTE_ID(state) {
+      state.activeNote.id = null;
+    },
+    SET_ACTIVE_NOTE_CATEGORY(state, payload) {
+      state.activeNote.category = payload;
+    },
   },
   actions: {
     async GET_ALL_NOTES({ state }) {
@@ -33,7 +46,6 @@ export default new Vuex.Store({
 
         });
         const json = await allNotes.json();
-
         state.allNotes = [...json.data];
         state.activeNote = { ...json.data[0] };
       } catch (error) {

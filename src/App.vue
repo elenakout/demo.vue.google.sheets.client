@@ -4,7 +4,7 @@
       <header>
         <h1>Open notes</h1>
       </header>
-      <button>Add Note</button>
+      <button @click="createNote">Add Note</button>
       <section class="notes-container">
         <article class="note" v-for="note in allNotes" :key="note.id">
           <h3 @click="SET_ACTIVE_NOTE(note.id)" class="note__title">
@@ -13,16 +13,47 @@
           <p>{{ note.content }}</p>
           <p>{{ note.category }}</p>
           <p>{{ note.id }}</p>
+          <p>modified: {{ new Date(note.lastModified).toDateString() }}</p>
+          <p>created: {{ new Date(note.created_at).toDateString() }}</p>
         </article>
       </section>
     </aside>
     <main>
       <section class="display">
         <h2>display note</h2>
-        <p>{{ activeNote.title }}</p>
+        <p>Id: {{ activeNote.id }}</p>
+        <p>Title: {{ activeNote.title }}</p>
+        <p>Content: {{ activeNote.content }}</p>
+        <p>Category: {{ activeNote.category }}</p>
+        <p>modified: {{ new Date(activeNote.lastModified).toDateString() }}</p>
+        <p>created: {{ new Date(activeNote.created_at).toDateString() }}</p>
       </section>
       <section class="editor">
         <h2>Note editor</h2>
+        <form @submit.prevent="saveNote">
+          <input v-model="noteTitle" />
+          <textarea
+            v-model="noteContent"
+            name="content"
+            id="content"
+            cols="30"
+            rows="10"
+          ></textarea>
+          <div>
+            <input type="radio" id="note" value="note" v-model="noteCategory" />
+            <label for="note">Note</label>
+            <input type="radio" id="todo" value="todo" v-model="noteCategory" />
+            <label for="todo">todo</label>
+            <input
+              type="radio"
+              id="feature"
+              value="feature"
+              v-model="noteCategory"
+            />
+            <label for="feature">Feature</label>
+          </div>
+          <input type="submit" value="Save Note" />
+        </form>
       </section>
     </main>
   </div>
@@ -35,7 +66,11 @@ export default {
   name: 'App',
   components: {},
   data() {
-    return {};
+    return {
+      title: '',
+      content: '',
+      category: '',
+    };
   },
   methods: {
     ...mapActions([
@@ -49,10 +84,49 @@ export default {
       'SET_ACTIVE_NOTE',
       'SET_ACTIVE_NOTE_TITLE',
       'SET_ACTIVE_NOTE_CONTENT',
+      'SET_ACTIVE_NOTE_ID',
+      'SET_ACTIVE_NOTE_CATEGORY',
     ]),
+    createNote() {
+      this.SET_ACTIVE_NOTE_TITLE('Title');
+      this.SET_ACTIVE_NOTE_CONTENT('New note...');
+      this.SET_ACTIVE_NOTE_ID();
+      this.SET_ACTIVE_NOTE_CATEGORY('note');
+    },
+    saveNote() {
+      if (this.activeNote.id) {
+        console.log('update');
+      } else {
+        console.log('new note');
+      }
+    },
   },
   computed: {
     ...mapState(['allNotes', 'activeNote']),
+    noteTitle: {
+      get() {
+        return this.activeNote.title;
+      },
+      set(val) {
+        this.SET_ACTIVE_NOTE_TITLE(val);
+      },
+    },
+    noteContent: {
+      get() {
+        return this.activeNote.content;
+      },
+      set(val) {
+        this.SET_ACTIVE_NOTE_CONTENT(val);
+      },
+    },
+    noteCategory: {
+      get() {
+        return this.activeNote.category;
+      },
+      set(val) {
+        this.SET_ACTIVE_NOTE_CATEGORY(val);
+      },
+    },
   },
   created() {
     this.GET_ALL_NOTES();
@@ -113,13 +187,9 @@ aside {
   gap: 1.5rem;
 }
 
-main {
-  border: 1px solid purple;
-  flex: 2 1 auto;
-
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+.notes-container {
+  display: grid;
+  gap: 10px;
 }
 
 .note {
@@ -129,5 +199,26 @@ main {
 
 .note__title {
   cursor: pointer;
+}
+
+main {
+  border: 1px solid purple;
+  flex: 2 1 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.display,
+.editor {
+  padding: 2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+form {
+  display: grid;
+  gap: 10px;
 }
 </style>
