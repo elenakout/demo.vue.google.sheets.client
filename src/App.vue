@@ -6,15 +6,19 @@
       </header>
       <button @click="createNote">Add Note</button>
       <section class="notes-container">
-        <article class="note" v-for="note in allNotes" :key="note.id">
+        <article class="note" v-for="note in GET_ALL_NOTES" :key="note.id">
           <h3 @click="SET_ACTIVE_NOTE(note.id)" class="note__title">
             {{ note.title }}
           </h3>
           <p>{{ note.content }}</p>
           <p>{{ note.category }}</p>
           <p>{{ note.id }}</p>
-          <p>modified: {{ new Date(note.lastModified).toDateString() }}</p>
-          <p>created: {{ new Date(note.created_at).toDateString() }}</p>
+          <p>
+            modified: {{ new Date(note.lastModified).toLocaleString('el-GR') }}
+          </p>
+          <p>
+            created: {{ new Date(note.created_at).toLocaleString('el-GR') }}
+          </p>
         </article>
       </section>
     </aside>
@@ -60,24 +64,20 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex';
+// eslint-disable-next-line object-curly-newline
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 
 export default {
   name: 'App',
   components: {},
   data() {
-    return {
-      title: '',
-      content: '',
-      category: '',
-    };
+    return {};
   },
   methods: {
     ...mapActions([
-      'GET_ALL_NOTES',
+      'FETCH_ALL_NOTES',
       'CREATE_NEW_NOTE',
       'UPDATE_NOTE',
-      'SAVE_NOTE',
       'DELETE_NOTE',
     ]),
     ...mapMutations([
@@ -86,15 +86,19 @@ export default {
       'SET_ACTIVE_NOTE_CONTENT',
       'SET_ACTIVE_NOTE_ID',
       'SET_ACTIVE_NOTE_CATEGORY',
+      'SET_ACTIVE_NOTE_MODIFIED',
+      'SET_ACTIVE_NOTE_CREATED',
     ]),
     createNote() {
       this.SET_ACTIVE_NOTE_TITLE('Title');
       this.SET_ACTIVE_NOTE_CONTENT('New note...');
       this.SET_ACTIVE_NOTE_ID();
       this.SET_ACTIVE_NOTE_CATEGORY('note');
+      this.SET_ACTIVE_NOTE_CREATED();
     },
     saveNote() {
       if (this.activeNote.id) {
+        this.SET_ACTIVE_NOTE_MODIFIED();
         this.UPDATE_NOTE();
       } else {
         this.CREATE_NEW_NOTE();
@@ -103,6 +107,7 @@ export default {
   },
   computed: {
     ...mapState(['allNotes', 'activeNote']),
+    ...mapGetters(['GET_ALL_NOTES']),
     noteTitle: {
       get() {
         return this.activeNote.title;
@@ -129,7 +134,7 @@ export default {
     },
   },
   created() {
-    this.GET_ALL_NOTES();
+    this.FETCH_ALL_NOTES();
   },
 };
 </script>

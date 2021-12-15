@@ -6,23 +6,23 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     allNotes: [],
-    activeNote: {
-      title: '',
-      content: '',
-      category: '',
-      id: null,
-    },
+    activeNote: {},
     error: null,
   },
   getters: {
-    ALL_NOTES() { },
+    GET_ALL_NOTES(state) {
+      return state.allNotes.sort(
+        (a, b) => new Date(b.lastModified) - new Date(a.lastModified),
+      );
+    },
     ACTIVE_NOTE() { },
   },
   mutations: {
-    SET_ACTIVE_NOTE(state, id) {
+    SET_ACTIVE_NOTE(state, noteId) {
       // all notes find(id)
       // set state active note
-      state.activeNote = { ...state.allNotes[id] };
+      const result = state.allNotes.find((obj) => obj.id === noteId);
+      state.activeNote = { ...result };
     },
     SET_ACTIVE_NOTE_TITLE(state, payload) {
       state.activeNote.title = payload;
@@ -36,9 +36,16 @@ export default new Vuex.Store({
     SET_ACTIVE_NOTE_CATEGORY(state, payload) {
       state.activeNote.category = payload;
     },
+    SET_ACTIVE_NOTE_CREATED(state) {
+      state.activeNote.created_at = Date.now();
+      state.activeNote.lastModified = Date.now();
+    },
+    SET_ACTIVE_NOTE_MODIFIED(state) {
+      state.activeNote.lastModified = Date.now();
+    },
   },
   actions: {
-    async GET_ALL_NOTES({ state }) {
+    async FETCH_ALL_NOTES({ state }) {
       state.allNotes = [];
       try {
         const allNotes = await fetch('http://localhost:3000/api/v1/notes', {
@@ -47,7 +54,7 @@ export default new Vuex.Store({
         });
         const json = await allNotes.json();
         state.allNotes = [...json.data];
-        state.activeNote = { ...json.data[0] };
+        state.activeNote = { ...json.data[json.results - 1] };
       } catch (error) {
         console.log(error);
       }
@@ -73,19 +80,14 @@ export default new Vuex.Store({
         };
         const response = await fetch('http://localhost:3000/api/v1/notes', requestOptions);
         const json = await response.json();
-
-        console.log('create res:', json.data);
-
-        console.log('update res:', json);
+        console.log(json.data);
         state.allNotes = [...json.data];
-        state.activeNote = { ...json.data[state.allNotes.length - 1] };
+        state.activeNote = { ...json.data[json.results - 1] };
       } catch (error) {
         console.log(error);
       }
     },
     async UPDATE_NOTE({ state }) {
-      // active note -> set title
-      // active note -> set content
       try {
         const requestOptions = {
           method: 'PUT',
@@ -94,16 +96,11 @@ export default new Vuex.Store({
         };
         const response = await fetch(`http://localhost:3000/api/v1/notes/${state.activeNote.id}`, requestOptions);
         const json = await response.json();
-        console.log('update res:', json);
         state.allNotes = [...json.data];
-        state.activeNote = { ...json.data[0] };
+        state.activeNote = { ...json.data[json.results - 1] };
       } catch (error) {
         console.log(error);
       }
-    },
-    SAVE_NOTE() {
-      // last modified -> Date.now
-      // update note ->  api/v1/notes/:id PATCH
     },
     DELETE_NOTE() {
       // delete note -> api/v1/notes/:id DELETE
