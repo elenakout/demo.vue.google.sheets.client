@@ -13,12 +13,11 @@
           <p>{{ note.content }}</p>
           <p>{{ note.category }}</p>
           <p>{{ note.id }}</p>
-          <p>
-            modified: {{ new Date(note.lastModified).toLocaleString('el-GR') }}
-          </p>
+          <p>modified: {{ new Date(note.modified).toLocaleString('el-GR') }}</p>
           <p>
             created: {{ new Date(note.created_at).toLocaleString('el-GR') }}
           </p>
+          <p>{{ note.modified | time }}</p>
         </article>
       </section>
     </aside>
@@ -29,30 +28,44 @@
         <p>Title: {{ activeNote.title }}</p>
         <p>Content: {{ activeNote.content }}</p>
         <p>Category: {{ activeNote.category }}</p>
-        <p>modified: {{ new Date(activeNote.lastModified).toDateString() }}</p>
+        <p>modified: {{ new Date(activeNote.modified).toDateString() }}</p>
         <p>created: {{ new Date(activeNote.created_at).toDateString() }}</p>
+        <p>{{ timeAgo }}</p>
       </section>
       <section class="editor">
         <h2>Note editor</h2>
-        <form @submit.prevent="saveNote">
-          <input v-model="noteTitle" />
+        <form @submit.prevent="saveNote" @input="formInput">
+          <input name="title" v-model="note.title" />
           <textarea
-            v-model="noteContent"
+            v-model="note.content"
             name="content"
             id="content"
             cols="30"
             rows="10"
           ></textarea>
           <div>
-            <input type="radio" id="note" value="note" v-model="noteCategory" />
+            <input
+              type="radio"
+              id="note"
+              value="note"
+              name="category"
+              v-model="note.category"
+            />
             <label for="note">Note</label>
-            <input type="radio" id="todo" value="todo" v-model="noteCategory" />
+            <input
+              type="radio"
+              name="category"
+              id="todo"
+              value="todo"
+              v-model="note.category"
+            />
             <label for="todo">todo</label>
             <input
+              name="category"
               type="radio"
               id="feature"
               value="feature"
-              v-model="noteCategory"
+              v-model="note.category"
             />
             <label for="feature">Feature</label>
           </div>
@@ -71,7 +84,9 @@ export default {
   name: 'App',
   components: {},
   data() {
-    return {};
+    return {
+      note: {},
+    };
   },
   methods: {
     ...mapActions([
@@ -80,61 +95,88 @@ export default {
       'UPDATE_NOTE',
       'DELETE_NOTE',
     ]),
-    ...mapMutations([
-      'SET_ACTIVE_NOTE',
-      'SET_ACTIVE_NOTE_TITLE',
-      'SET_ACTIVE_NOTE_CONTENT',
-      'SET_ACTIVE_NOTE_ID',
-      'SET_ACTIVE_NOTE_CATEGORY',
-      'SET_ACTIVE_NOTE_MODIFIED',
-      'SET_ACTIVE_NOTE_CREATED',
-    ]),
+    ...mapMutations(['SET_ACTIVE_NOTE', 'UPDATE_ACTIVE_NOTE']),
     createNote() {
-      this.SET_ACTIVE_NOTE_TITLE('Title');
-      this.SET_ACTIVE_NOTE_CONTENT('New note...');
-      this.SET_ACTIVE_NOTE_ID();
-      this.SET_ACTIVE_NOTE_CATEGORY('note');
-      this.SET_ACTIVE_NOTE_CREATED();
+      this.note = {
+        title: 'Title',
+        content: 'New note...',
+        category: 'note',
+        created_at: new Date(),
+        modified: new Date(),
+        id: null,
+      };
+
+      this.UPDATE_ACTIVE_NOTE(this.note);
+      // this.SET_ACTIVE_NOTE_TITLE('Title');
+      // this.SET_ACTIVE_NOTE_CONTENT('New note...');
+      // this.SET_ACTIVE_NOTE_ID();
+      // this.SET_ACTIVE_NOTE_CATEGORY('note');
+      // this.SET_ACTIVE_NOTE_CREATED();
     },
     saveNote() {
       if (this.activeNote.id) {
-        this.SET_ACTIVE_NOTE_MODIFIED();
+        // this.SET_ACTIVE_NOTE_MODIFIED();
         this.UPDATE_NOTE();
       } else {
         this.CREATE_NEW_NOTE();
       }
     },
+    formInput() {
+      this.note.modified = new Date();
+      this.UPDATE_ACTIVE_NOTE(this.note);
+    },
+  },
+  filters: {
+    time(val) {
+      const now = new Date();
+      const timeNote = new Date(val);
+
+      const diff = now.getTime() - timeNote.getTime();
+
+      const mins = Math.round(diff / 1000 / 60);
+      const hours = Math.round(mins / 60);
+      const days = Math.round(hours / 24);
+
+      if (mins < 60) {
+        return `Last update ${mins} mins ago`;
+      }
+      if (hours < 24) {
+        return `Last update ${hours} hours ago`;
+      }
+      return `Last update ${days} days ago`;
+    },
   },
   computed: {
     ...mapState(['allNotes', 'activeNote']),
     ...mapGetters(['GET_ALL_NOTES']),
-    noteTitle: {
-      get() {
-        return this.activeNote.title;
-      },
-      set(val) {
-        this.SET_ACTIVE_NOTE_TITLE(val);
-      },
-    },
-    noteContent: {
-      get() {
-        return this.activeNote.content;
-      },
-      set(val) {
-        this.SET_ACTIVE_NOTE_CONTENT(val);
-      },
-    },
-    noteCategory: {
-      get() {
-        return this.activeNote.category;
-      },
-      set(val) {
-        this.SET_ACTIVE_NOTE_CATEGORY(val);
-      },
+    timeAgo() {
+      // get time difference between two timestamps
+      // const before = new Date('February 1 2019 7:30:59');
+      const now = new Date();
+      const timeNote = new Date(this.activeNote.modified);
+
+      const diff = now.getTime() - timeNote.getTime();
+
+      const mins = Math.round(diff / 1000 / 60);
+      const hours = Math.round(mins / 60);
+      const days = Math.round(hours / 24);
+
+      if (mins < 60) {
+        return `Last update ${mins} mins ago`;
+      }
+      if (hours < 24) {
+        return `Last update ${hours} hours ago`;
+      }
+      return `Last update ${days} days ago`;
     },
   },
   created() {
     this.FETCH_ALL_NOTES();
+  },
+  watch: {
+    activeNote(val) {
+      this.note = val;
+    },
   },
 };
 </script>
@@ -190,6 +232,11 @@ aside {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+
+  // position: fixed;
+  // overflow-y: scroll;
+  // top: 0;
+  // bottom: 0;
 }
 
 .notes-container {

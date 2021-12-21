@@ -11,9 +11,7 @@ export default new Vuex.Store({
   },
   getters: {
     GET_ALL_NOTES(state) {
-      return state.allNotes.sort(
-        (a, b) => new Date(b.lastModified) - new Date(a.lastModified),
-      );
+      return state.allNotes;
     },
     ACTIVE_NOTE() { },
   },
@@ -24,24 +22,8 @@ export default new Vuex.Store({
       const result = state.allNotes.find((obj) => obj.id === noteId);
       state.activeNote = { ...result };
     },
-    SET_ACTIVE_NOTE_TITLE(state, payload) {
-      state.activeNote.title = payload;
-    },
-    SET_ACTIVE_NOTE_CONTENT(state, payload) {
-      state.activeNote.content = payload;
-    },
-    SET_ACTIVE_NOTE_ID(state) {
-      state.activeNote.id = null;
-    },
-    SET_ACTIVE_NOTE_CATEGORY(state, payload) {
-      state.activeNote.category = payload;
-    },
-    SET_ACTIVE_NOTE_CREATED(state) {
-      state.activeNote.created_at = Date.now();
-      state.activeNote.lastModified = Date.now();
-    },
-    SET_ACTIVE_NOTE_MODIFIED(state) {
-      state.activeNote.lastModified = Date.now();
+    UPDATE_ACTIVE_NOTE(state, note) {
+      state.activeNote = note;
     },
   },
   actions: {
@@ -53,8 +35,11 @@ export default new Vuex.Store({
 
         });
         const json = await allNotes.json();
-        state.allNotes = [...json.data];
-        state.activeNote = { ...json.data[json.results - 1] };
+        const sortedNotes = json.data.sort(
+          (a, b) => new Date(b.modified) - new Date(a.modified),
+        );
+        state.allNotes = [...sortedNotes];
+        state.activeNote = { ...sortedNotes[0] };
       } catch (error) {
         console.log(error);
       }
@@ -78,11 +63,15 @@ export default new Vuex.Store({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(state.activeNote),
         };
+        console.log('state active note: ', state.activeNote);
         const response = await fetch('http://localhost:3000/api/v1/notes', requestOptions);
         const json = await response.json();
         console.log(json.data);
-        state.allNotes = [...json.data];
-        state.activeNote = { ...json.data[json.results - 1] };
+        const sortedNotes = json.data.sort(
+          (a, b) => new Date(b.modified) - new Date(a.modified),
+        );
+        state.allNotes = [...sortedNotes];
+        state.activeNote = { ...sortedNotes[0] };
       } catch (error) {
         console.log(error);
       }
@@ -94,10 +83,18 @@ export default new Vuex.Store({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(state.activeNote),
         };
+        console.log('update note: ', state.activeNote);
         const response = await fetch(`http://localhost:3000/api/v1/notes/${state.activeNote.id}`, requestOptions);
         const json = await response.json();
-        state.allNotes = [...json.data];
-        state.activeNote = { ...json.data[json.results - 1] };
+        const sortedNotes = json.data.sort(
+          (a, b) => new Date(b.modified) - new Date(a.modified),
+        );
+
+        state.allNotes = [...sortedNotes];
+        state.activeNote = { ...sortedNotes[0] };
+
+        console.log('json: ', json.data);
+        console.log('sorted: ', sortedNotes);
       } catch (error) {
         console.log(error);
       }
