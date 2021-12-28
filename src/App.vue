@@ -10,7 +10,7 @@
           <h3 @click="SET_ACTIVE_NOTE(note.id)" class="note__title">
             {{ note.title }}
           </h3>
-          <p>{{ note.content }}</p>
+          <p class="note__content">{{ note.content }}</p>
           <p>{{ note.category }}</p>
           <p>{{ note.id }}</p>
           <p>modified: {{ new Date(note.modified).toLocaleString('el-GR') }}</p>
@@ -280,10 +280,19 @@ aside {
 .note {
   border: 1px solid blue;
   padding: 1.5rem;
+  overflow-wrap: break-word;
 }
 
 .note__title {
   cursor: pointer;
+}
+
+.note__content {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .trash {
@@ -298,12 +307,19 @@ aside {
 }
 
 main {
+  max-height: 100vh;
   border: 1px solid purple;
   flex: 2 1 auto;
 
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.display {
+  white-space: pre-wrap;
+  max-height: 50vh;
+  overflow-y: auto;
 }
 
 .display,
