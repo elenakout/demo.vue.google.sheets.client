@@ -132,16 +132,4 @@ main {
   max-height: 50vh;
   overflow-y: auto;
 }
-
-.display,
-.editor {
-  padding: 2rem;
-  display: grid;
-  gap: 1rem;
-}
-
-form {
-  display: grid;
-  gap: 10px;
-}
 </style>

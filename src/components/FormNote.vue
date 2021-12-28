@@ -37,17 +37,8 @@ export default {
 
 <template>
   <section class="editor">
-    <h2>Note editor</h2>
     <form @submit.prevent="saveNote" @input="formInput">
-      <input name="title" v-model="note.title" />
-      <textarea
-        v-model="note.content"
-        name="content"
-        id="content"
-        cols="30"
-        rows="10"
-      ></textarea>
-      <div>
+      <div class="radio-container">
         <input
           type="radio"
           id="note"
@@ -73,9 +64,75 @@ export default {
         />
         <label for="feature">Feature</label>
       </div>
-      <input type="submit" value="Save Note" />
+      <input name="title" v-model="note.title" type="text" />
+      <textarea
+        v-model="note.content"
+        name="content"
+        id="content"
+        cols="30"
+        rows="10"
+      ></textarea>
+
+      <button>Save Note</button>
     </form>
   </section>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.editor {
+  min-height: 100vh;
+}
+
+form {
+  padding: 2rem;
+  display: grid;
+  height: 100%;
+  grid-auto-rows: min-content;
+  gap: 1rem;
+}
+
+input[type='text'] {
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 1rem;
+}
+
+textarea {
+  min-height: 100%;
+  border: none;
+  font-family: Roboto;
+  font-size: 1rem;
+  padding: 1rem;
+  resize: none;
+}
+
+.radio-container {
+  display: flex;
+  gap: 15px;
+}
+
+input[type='radio'] {
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+}
+
+input[type='radio']:checked + label {
+  font-weight: bold;
+  border: 2px solid rgb(17, 110, 22);
+  color: rgb(17, 110, 22);
+}
+
+label {
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  border: 1px solid gray;
+  font-size: 14px;
+  font-family: Roboto;
+  cursor: pointer;
+}
+</style>
