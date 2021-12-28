@@ -4,7 +4,7 @@
       <header>
         <h1>Open notes</h1>
       </header>
-      <button @click="createNote">Add Note</button>
+      <button-add-note></button-add-note>
       <section class="notes-container">
         <article class="note" v-for="note in GET_ALL_NOTES" :key="note.id">
           <h3 @click="SET_ACTIVE_NOTE(note.id)" class="note__title">
@@ -38,9 +38,8 @@
     </aside>
     <main>
       <section class="display">
-        <h2>display note</h2>
+        <h2>Title: {{ activeNote.title }}</h2>
         <p>Id: {{ activeNote.id }}</p>
-        <p>Title: {{ activeNote.title }}</p>
         <p>Content: {{ activeNote.content }}</p>
         <p>Category: {{ activeNote.category }}</p>
         <p>modified: {{ new Date(activeNote.modified).toDateString() }}</p>
@@ -109,10 +108,13 @@
 <script>
 // eslint-disable-next-line object-curly-newline
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import ButtonAddNote from '@/components/ButtonAddNote.vue';
 
 export default {
   name: 'App',
-  components: {},
+  components: {
+    ButtonAddNote,
+  },
   data() {
     return {
       note: {},
@@ -126,18 +128,6 @@ export default {
       'DELETE_NOTE',
     ]),
     ...mapMutations(['SET_ACTIVE_NOTE', 'UPDATE_ACTIVE_NOTE']),
-    createNote() {
-      this.note = {
-        title: 'Title',
-        content: 'New note...',
-        category: 'note',
-        created_at: new Date(),
-        modified: new Date(),
-        id: null,
-      };
-
-      this.UPDATE_ACTIVE_NOTE(this.note);
-    },
     saveNote() {
       if (this.activeNote.id) {
         // this.SET_ACTIVE_NOTE_MODIFIED();
