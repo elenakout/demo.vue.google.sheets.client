@@ -15,99 +15,36 @@
       </section>
     </aside>
     <main>
-      <section class="editor">
-        <h2>Note editor</h2>
-        <form @submit.prevent="saveNote" @input="formInput">
-          <input name="title" v-model="note.title" />
-          <textarea
-            v-model="note.content"
-            name="content"
-            id="content"
-            cols="30"
-            rows="10"
-          ></textarea>
-          <div>
-            <input
-              type="radio"
-              id="note"
-              value="note"
-              name="category"
-              v-model="note.category"
-            />
-            <label for="note">Note</label>
-            <input
-              type="radio"
-              name="category"
-              id="todo"
-              value="todo"
-              v-model="note.category"
-            />
-            <label for="todo">todo</label>
-            <input
-              name="category"
-              type="radio"
-              id="feature"
-              value="feature"
-              v-model="note.category"
-            />
-            <label for="feature">Feature</label>
-          </div>
-          <input type="submit" value="Save Note" />
-        </form>
-      </section>
+      <form-note></form-note>
     </main>
   </div>
 </template>
 
 <script>
 // eslint-disable-next-line object-curly-newline
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import ButtonAddNote from '@/components/ButtonAddNote.vue';
 import CardNote from '@/components/CardNote.vue';
+import FormNote from '@/components/FormNote.vue';
 
 export default {
   name: 'App',
   components: {
     ButtonAddNote,
     CardNote,
+    FormNote,
   },
   data() {
-    return {
-      note: {},
-    };
+    return {};
   },
   methods: {
-    ...mapActions([
-      'FETCH_ALL_NOTES',
-      'CREATE_NEW_NOTE',
-      'UPDATE_NOTE',
-      'DELETE_NOTE',
-    ]),
-    ...mapMutations(['SET_ACTIVE_NOTE', 'UPDATE_ACTIVE_NOTE']),
-    saveNote() {
-      if (this.activeNote.id) {
-        // this.SET_ACTIVE_NOTE_MODIFIED();
-        this.UPDATE_NOTE();
-      } else {
-        this.CREATE_NEW_NOTE();
-      }
-    },
-    formInput() {
-      this.note.modified = new Date();
-      this.UPDATE_ACTIVE_NOTE(this.note);
-    },
+    ...mapActions(['FETCH_ALL_NOTES']),
   },
   computed: {
-    ...mapState(['allNotes', 'activeNote']),
     ...mapGetters(['GET_ALL_NOTES']),
   },
   created() {
     this.FETCH_ALL_NOTES();
-  },
-  watch: {
-    activeNote(val) {
-      this.note = val;
-    },
   },
 };
 </script>
