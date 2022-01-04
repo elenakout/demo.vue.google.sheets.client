@@ -1,5 +1,10 @@
 <script>
 import { mapActions, mapMutations } from 'vuex';
+import {
+  formatDistanceToNowStrict,
+  format,
+  differenceInCalendarDays,
+} from 'date-fns';
 
 export default {
   name: 'CardNote',
@@ -39,6 +44,15 @@ export default {
       }
       return `Last update ${days} days ago`;
     },
+    timeAgo(val) {
+      return formatDistanceToNowStrict(new Date(val), { addSuffix: true });
+    },
+    timeFormat(val) {
+      return format(new Date(val), 'QQQQ MMM Do eee');
+    },
+    relative(val, val2) {
+      return differenceInCalendarDays(new Date(val), new Date(val2));
+    },
   },
 };
 </script>
@@ -54,6 +68,9 @@ export default {
     <p>modified: {{ new Date(note.modified).toLocaleString('el-GR') }}</p>
     <p>created: {{ new Date(note.created_at).toLocaleString('el-GR') }}</p>
     <p>{{ note.modified | time }}</p>
+    <p>date-nfs: {{ note.modified | timeAgo }}</p>
+    <p>format: {{ note.modified | timeFormat }}</p>
+    <p>relative: {{ note.modified | relative(note.created_at) }}</p>
     <button class="trash" @click="deleteNote(note.id)">
       <svg
         width="24"
