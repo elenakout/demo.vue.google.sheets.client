@@ -1,10 +1,6 @@
 <script>
 import { mapActions, mapMutations } from 'vuex';
-import {
-  formatDistanceToNowStrict,
-  format,
-  differenceInCalendarDays,
-} from 'date-fns';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 export default {
   name: 'CardNote',
@@ -26,32 +22,8 @@ export default {
   },
   computed: {},
   filters: {
-    time(val) {
-      const now = new Date();
-      const timeNote = new Date(val);
-
-      const diff = now.getTime() - timeNote.getTime();
-
-      const mins = Math.round(diff / 1000 / 60);
-      const hours = Math.round(mins / 60);
-      const days = Math.round(hours / 24);
-
-      if (mins < 60) {
-        return `Last update ${mins} mins ago`;
-      }
-      if (hours < 24) {
-        return `Last update ${hours} hours ago`;
-      }
-      return `Last update ${days} days ago`;
-    },
     timeAgo(val) {
       return formatDistanceToNowStrict(new Date(val), { addSuffix: true });
-    },
-    timeFormat(val) {
-      return format(new Date(val), 'QQQQ MMM Do eee');
-    },
-    relative(val, val2) {
-      return differenceInCalendarDays(new Date(val), new Date(val2));
     },
   },
 };
@@ -59,18 +31,6 @@ export default {
 
 <template>
   <article>
-    <h3 @click="SET_ACTIVE_NOTE(note.id)" class="note__title">
-      {{ note.title }}
-    </h3>
-    <p class="note__content">{{ note.content }}</p>
-    <p>{{ note.category }}</p>
-    <p>{{ note.id }}</p>
-    <p>modified: {{ new Date(note.modified).toLocaleString('el-GR') }}</p>
-    <p>created: {{ new Date(note.created_at).toLocaleString('el-GR') }}</p>
-    <p>{{ note.modified | time }}</p>
-    <p>date-nfs: {{ note.modified | timeAgo }}</p>
-    <p>format: {{ note.modified | timeFormat }}</p>
-    <p>relative: {{ note.modified | relative(note.created_at) }}</p>
     <button class="trash" @click="deleteNote(note.id)">
       <svg
         width="24"
@@ -86,12 +46,18 @@ export default {
         />
       </svg>
     </button>
+    <h3 @click="SET_ACTIVE_NOTE(note.id)" class="note__title">
+      {{ note.title }}
+    </h3>
+    <p class="note__content">{{ note.content }}</p>
+    <div>{{ note.category }}</div>
+    <p>{{ note.modified | timeAgo }}</p>
   </article>
 </template>
 
 <style scoped lang="scss">
 .note {
-  border: 1px solid blue;
+  // border: 1px solid blue;
   padding: 1.5rem;
   overflow-wrap: break-word;
 }
@@ -102,9 +68,11 @@ export default {
 
 .note__content {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  white-space: pre-wrap;
 }
 </style>

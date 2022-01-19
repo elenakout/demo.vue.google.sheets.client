@@ -40,6 +40,7 @@ export default {
 
 <template>
   <section class="display">
+    <h1>hello</h1>
     <h2>Title: {{ activeNote.title }}</h2>
     <p>Id: {{ activeNote.id }}</p>
     <p>Content: {{ activeNote.content }}</p>

@@ -99,7 +99,7 @@ input[type='text'] {
 }
 
 textarea {
-  min-height: 100%;
+  min-height: 70vh;
   border: none;
   font-family: Roboto;
   font-size: 1rem;

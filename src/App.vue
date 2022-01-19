@@ -50,6 +50,26 @@ export default {
 </script>
 
 <style lang="scss">
+/*** Costume Properties ***/
+:root {
+  /** Colors **/
+  --hue-primary: 263;
+  --hue-accent: 83;
+
+  --clr-primary-100: var(--hue-primary) 84% 10%;
+  --clr-primary-300: var(--hue-primary) 84% 30%;
+  --clr-primary-600: var(--hue-primary) 84% 60%;
+  --clr-primary-900: var(--hue-primary) 84% 95%;
+
+  --clr-accent-100: var(--hue-accent) 84% 10%;
+  --clr-accent-200: var(--hue-accent) 84% 20%;
+  --clr-accent-300: var(--hue-accent) 84% 30%;
+  --clr-accent-900: var(--hue-accent) 84% 90%;
+
+  --clr-grey-400: var(--hue-primary) 7% 40%;
+  --clr-red: 354 70% 54%;
+}
+
 *,
 *::before,
 *::after {
@@ -89,22 +109,22 @@ ul {
 
 .flex {
   display: flex;
-  gap: var(--gap, 1rem);
+  gap: var(--gap, 3px);
 }
 
 aside {
   max-width: 30%;
-  border: 1px solid red;
+  // border: 1px solid red;
   flex: 0 3 auto;
-  padding: 1.5rem;
+  // padding: 1.5rem;
 
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 
   // max-height: calc(100vh - 9rem);
-  max-height: 100vh;
-  overflow-y: auto;
+  // max-height: 100vh;
+  // overflow-y: auto;
 
   // position: fixed;
   // overflow-y: scroll;
@@ -114,12 +134,15 @@ aside {
 
 .notes-container {
   display: grid;
-  gap: 10px;
+  gap: 3px;
+
+  max-height: 85vh;
+  overflow-y: auto;
 }
 
 main {
   max-height: 100vh;
-  border: 1px solid purple;
+  // border: 1px solid purple;
   flex: 2 1 auto;
 
   display: flex;
