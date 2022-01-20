@@ -39,7 +39,6 @@ button {
   font-size: var(--fs-size-600);
   font-weight: bold;
   text-transform: uppercase;
-  border: none;
   background-color: hsl(var(--clr-primary-600));
   color: hsl(var(--clr-primary-900));
 }

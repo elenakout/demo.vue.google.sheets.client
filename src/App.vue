@@ -1,13 +1,12 @@
 <template>
   <div id="app" class="flex">
     <aside class="flex">
-      <header>
+      <header class="header">
         <h1>Open notes</h1>
       </header>
       <button-add-note></button-add-note>
       <section class="notes-container">
         <card-note
-          class="note"
           v-for="note in GET_ALL_NOTES"
           :key="note.id"
           :note="note"
@@ -94,6 +93,8 @@ body {
   min-height: 100vh;
   text-rendering: optimizeSpeed;
   line-height: 1;
+
+  background-color: hsl(var(--clr-primary-900) / 0.2);
 }
 
 html {
@@ -115,6 +116,11 @@ ul {
   list-style: none;
 }
 
+button {
+  border: none;
+  background: none;
+}
+
 .uppercase {
   text-transform: uppercase;
 }
@@ -131,7 +137,7 @@ aside {
   flex-direction: column;
 }
 
-header {
+.header {
   padding: 1rem 0;
   text-align: center;
   font-family: var(--ff-cursive);
