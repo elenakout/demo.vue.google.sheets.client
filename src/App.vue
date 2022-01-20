@@ -21,7 +21,6 @@
 </template>
 
 <script>
-// eslint-disable-next-line object-curly-newline
 import { mapActions, mapGetters } from 'vuex';
 import ButtonAddNote from '@/components/ButtonAddNote.vue';
 import CardNote from '@/components/CardNote.vue';

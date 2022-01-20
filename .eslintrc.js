@@ -6,6 +6,7 @@ module.exports = {
   extends: [
     'plugin:vue/essential',
     '@vue/airbnb',
+    'prettier',
   ],
   parserOptions: {
     parser: 'babel-eslint',
@@ -21,4 +22,5 @@ module.exports = {
       ignorePattern: 'd="([\\s\\S]*?)"',
     }],
   },
+  plugins: ['prettier'],
 };
