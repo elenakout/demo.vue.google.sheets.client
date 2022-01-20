@@ -71,6 +71,7 @@ export default {
         id="content"
         cols="30"
         rows="10"
+        spellcheck="true"
       ></textarea>
 
       <button>Save Note</button>
