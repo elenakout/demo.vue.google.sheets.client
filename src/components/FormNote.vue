@@ -41,18 +41,18 @@ export default {
       <div class="radio-container">
         <input
           type="radio"
-          id="note"
-          value="note"
           name="category"
           v-model="note.category"
+          id="note"
+          value="note"
         />
         <label for="note">Note</label>
         <input
           type="radio"
           name="category"
+          v-model="note.category"
           id="todo"
           value="todo"
-          v-model="note.category"
         />
         <label for="todo">todo</label>
         <input
@@ -81,35 +81,46 @@ export default {
 <style scoped lang="scss">
 .editor {
   min-height: 100vh;
+  padding: 2rem 2rem 0 2rem;
 }
 
 form {
-  padding: 2rem;
   display: grid;
   height: 100%;
   grid-auto-rows: min-content;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 input[type='text'] {
   border: none;
-  font-size: 1.5rem;
+  font-size: var(--fs-size-600);
   font-weight: bold;
   padding: 1rem;
+  background-color: hsl(var(--clr-primary-900) / 0.001);
+}
+
+input[type='text']:focus {
+  outline: none;
 }
 
 textarea {
-  min-height: 70vh;
+  min-height: 72vh;
   border: none;
   font-family: Roboto;
-  font-size: 1rem;
+  font-size: var(--fs-size-400);
   padding: 1rem;
   resize: none;
+  background-color: hsl(var(--clr-primary-900));
+}
+
+textarea:focus {
+  outline: none;
 }
 
 .radio-container {
   display: flex;
-  gap: 15px;
+  gap: 1rem;
+  justify-content: flex-end;
 }
 
 input[type='radio'] {
@@ -118,21 +129,63 @@ input[type='radio'] {
   pointer-events: none;
 }
 
-input[type='radio']:checked + label {
-  font-weight: bold;
-  border: 2px solid rgb(17, 110, 22);
-  color: rgb(17, 110, 22);
-}
-
 label {
-  padding: 0.5rem 1rem;
+  cursor: pointer;
+  padding: 6px 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50px;
-  border: 1px solid gray;
-  font-size: 14px;
-  font-family: Roboto;
+
+  border-radius: 1rem;
+  opacity: 50%;
+
+  line-height: 1;
+  font-size: var(--fs-size-300);
+  font-family: var(--ff-sans);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  color: hsl(var(--clr-accent-900));
+
+  transition: all 0.2s ease-in;
+
+  background-color: hsl(var(--clr-accent-300));
+}
+
+label:hover {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+input[id='todo'] + label {
+  background-color: hsl(var(--clr-accent-100));
+}
+input[id='feature'] + label {
+  background-color: hsl(var(--clr-accent-200));
+}
+input[id='note'] + label {
+  // font-weight: bold;
+  background-color: hsl(var(--clr-accent-300));
+}
+
+input[type='radio']:checked + label {
+  opacity: 1;
+}
+
+button {
   cursor: pointer;
+  padding: 0.8rem 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-size-600);
+  font-weight: bold;
+  text-transform: uppercase;
+  background-color: hsl(var(--clr-primary-600));
+  color: hsl(var(--clr-primary-900));
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: hsl(var(--clr-primary-400) / 0.9);
 }
 </style>

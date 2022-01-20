@@ -153,18 +153,18 @@ aside {
   display: grid;
   gap: 3px;
 
-  max-height: 85vh;
+  max-height: 75vh;
   overflow-y: auto;
 }
 
 main {
   max-height: 100vh;
+  flex: 1;
   // border: 1px solid purple;
-  flex: 2 1 auto;
+  // flex: 2 1 auto;
 
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  // display: flex;
+  // flex-direction: column;
 }
 
 .display {
