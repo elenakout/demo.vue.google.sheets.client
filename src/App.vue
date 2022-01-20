@@ -66,6 +66,7 @@ export default {
 
   --clr-grey-400: var(--hue-primary) 7% 40%;
   --clr-red: 354 70% 54%;
+  --clr-white: 0 84% 98%;
 
   /** Typography **/
   --ff-serif: 'Noto Serif', serif;
@@ -94,7 +95,7 @@ body {
   text-rendering: optimizeSpeed;
   line-height: 1;
 
-  background-color: hsl(var(--clr-primary-900) / 0.2);
+  background-color: hsl(var(--clr-primary-900));
 }
 
 html {
@@ -119,6 +120,7 @@ ul {
 button {
   border: none;
   background: none;
+  cursor: pointer;
 }
 
 .uppercase {

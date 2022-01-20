@@ -20,7 +20,18 @@ export default {
       this.DELETE_NOTE(id);
     },
   },
-  computed: {},
+  computed: {
+    tagColor() {
+      if (this.note.category === 'todo') {
+        return { '--tag-color': 'var(--clr-accent-100)' };
+      }
+      if (this.note.category === 'feature') {
+        return { '--tag-color': 'var(--clr-accent-200)' };
+      }
+
+      return { '--tag-color': 'var(--clr-accent-300)' };
+    },
+  },
   filters: {
     timeAgo(val) {
       return formatDistanceToNowStrict(new Date(val), { addSuffix: true });
@@ -30,7 +41,7 @@ export default {
 </script>
 
 <template>
-  <article class="flex">
+  <article class="flex" :style="tagColor">
     <header class="flex">
       <h3 @click="SET_ACTIVE_NOTE(note.id)" class="note__title">
         {{ note.title }}
@@ -53,8 +64,8 @@ export default {
     </header>
     <p class="note__content">{{ note.content }}</p>
     <footer class="flex">
-      <span>{{ note.category }}</span>
-      <p>{{ note.modified | timeAgo }}</p>
+      <span class="note__tag">{{ note.category }}</span>
+      <p class="note__time">{{ note.modified | timeAgo }}</p>
     </footer>
   </article>
 </template>
@@ -67,9 +78,10 @@ article {
   padding: 1rem 1.375rem;
   margin-bottom: 3px;
   overflow-wrap: break-word;
-  background-color: hsl(var(--clr-primary-900) / 0.3);
+
+  background-color: hsl(var(--clr-white));
   // border-top: 1px solid hsl(var(--clr-primary-400));
-  border-bottom: 1px solid hsl(var(--clr-primary-400));
+  border-bottom: 1px solid hsl(var(--clr-primary-600) / 0.8);
 }
 
 header,
@@ -78,6 +90,13 @@ footer {
   justify-content: space-between;
 }
 
+button {
+  transition: transform 0.3s ease-in;
+}
+
+button:hover {
+  transform: scale(1.145);
+}
 .note__title {
   cursor: pointer;
   font-family: var(--ff-sans);
@@ -97,5 +116,24 @@ footer {
   text-overflow: ellipsis;
 
   // white-space: pre-wrap;
+}
+
+.note__tag {
+  padding: 6px 12px;
+  border-radius: 14px;
+
+  font-size: var(--fs-size-200);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  color: hsl(var(--clr-accent-900));
+  background-color: hsl(var(--tag-color));
+}
+
+.note__time {
+  line-height: 1.1;
+  font-weight: 400;
+  font-size: var(--fs-size-300);
+  color: hsl(var(--clr-grey-400));
 }
 </style>

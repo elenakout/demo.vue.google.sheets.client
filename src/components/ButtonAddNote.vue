@@ -34,6 +34,7 @@ export default {
 
 <style scoped lang="scss">
 button {
+  cursor: pointer;
   padding: 1rem 0;
   font-family: var(--ff-sans);
   font-size: var(--fs-size-600);
@@ -41,5 +42,10 @@ button {
   text-transform: uppercase;
   background-color: hsl(var(--clr-primary-600));
   color: hsl(var(--clr-primary-900));
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: hsl(var(--clr-primary-400) / 0.9);
 }
 </style>
