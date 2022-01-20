@@ -68,6 +68,18 @@ export default {
 
   --clr-grey-400: var(--hue-primary) 7% 40%;
   --clr-red: 354 70% 54%;
+
+  /** Typography **/
+  --ff-serif: 'Noto Serif', serif;
+  --ff-cursive: 'Righteous', cursive;
+  --ff-sans: 'Roboto', sans-serif;
+
+  --fs-size-900: 2.25rem;
+  --fs-size-800: 2.25rem;
+  --fs-size-600: 1.25rem;
+  --fs-size-400: 1rem;
+  --fs-size-300: 0.875rem;
+  --fs-size-200: 0.625rem;
 }
 
 *,
