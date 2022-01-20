@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="flex">
-    <aside>
+    <aside class="flex">
       <header>
         <h1>Open notes</h1>
       </header>
@@ -56,7 +56,7 @@ export default {
   --hue-accent: 83;
 
   --clr-primary-100: var(--hue-primary) 84% 10%;
-  --clr-primary-300: var(--hue-primary) 84% 30%;
+  --clr-primary-400: var(--hue-primary) 84% 30%;
   --clr-primary-600: var(--hue-primary) 84% 60%;
   --clr-primary-900: var(--hue-primary) 84% 95%;
 
@@ -73,8 +73,9 @@ export default {
   --ff-cursive: 'Righteous', cursive;
   --ff-sans: 'Roboto', sans-serif;
 
-  --fs-size-900: 2.25rem;
+  --fs-size-900: 2.5rem;
   --fs-size-800: 2.25rem;
+  --fs-size-700: 2rem;
   --fs-size-600: 1.25rem;
   --fs-size-400: 1rem;
   --fs-size-300: 0.875rem;
@@ -103,7 +104,7 @@ html {
   line-height: 20px;
   /* identical to box height, or 125% */
 
-  color: #000000;
+  color: hsl(var(--clr-primary-100));
 }
 
 a {
@@ -124,23 +125,20 @@ ul {
 }
 
 aside {
-  max-width: 30%;
-  // border: 1px solid red;
-  flex: 0 3 auto;
-  // padding: 1.5rem;
-
-  display: flex;
+  --gap: 1rem;
+  max-width: 31.25rem;
+  // border: 1px solid red
   flex-direction: column;
-  gap: 1.5rem;
+}
 
-  // max-height: calc(100vh - 9rem);
-  // max-height: 100vh;
-  // overflow-y: auto;
-
-  // position: fixed;
-  // overflow-y: scroll;
-  // top: 0;
-  // bottom: 0;
+header {
+  padding: 1rem 0;
+  text-align: center;
+  font-family: var(--ff-cursive);
+  font-size: var(--fs-size-700);
+  letter-spacing: 2px;
+  background-color: hsl(var(--clr-primary-400));
+  color: hsl(var(--clr-primary-900));
 }
 
 .notes-container {
